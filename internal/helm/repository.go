@@ -88,6 +88,11 @@ func (r *ChartRepository) Get(name, version string) (*repo.ChartVersion, error) 
 	matchingVersions := make(semver.Collection, 0)
 	chartVersionLookup := make(map[*semver.Version]*repo.ChartVersion)
 	for _, chartVersion := range chartVersions {
+		// Check for exact matches first
+		if version == chartVersion.Version {
+			return chartVersion, nil
+		}
+
 		version, err := semver.NewVersion(chartVersion.Version)
 		if err != nil {
 			continue
