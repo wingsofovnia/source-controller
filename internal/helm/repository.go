@@ -119,10 +119,10 @@ func (r *ChartRepository) Get(name, version string) (*repo.ChartVersion, error) 
 				return left.LessThan(right)
 			}
 
-			// Versions can be equal with different metadata since metadata is not
-			// covered as a part of the comparable version as per spec.
 			// Having chart creation timestamp at our disposal, we keep chronological
-			// order for packages with the same build metadata.
+			// order for packages with the same version, especially build metadata, since
+			// versions can be equal with different metadata, because it is not considered
+			// a part of the comparable version.
 			return chartVersionLookup[left].Created.Before(chartVersionLookup[right].Created)
 		})()
 	})
