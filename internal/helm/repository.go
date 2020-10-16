@@ -61,8 +61,9 @@ func NewChartRepository(repositoryURL string, providers getter.Providers, opts [
 }
 
 // Get returns the repo.ChartVersion for the given name, the version is expected
-// to be a semver.Constraints compatible string. If version is empty, the latest
-// stable version will be returned and prerelease versions will be ignored.
+// to be a semver.Constraints compatible string. In case of an ambiguous match,
+// takes the freshest chart. If version is empty, the latest stable version will
+// be returned and prerelease versions will be ignored.
 func (r *ChartRepository) Get(name, version string) (*repo.ChartVersion, error) {
 	chartVersions, ok := r.Index.Entries[name]
 	if !ok {
