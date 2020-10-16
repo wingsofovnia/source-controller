@@ -104,12 +104,11 @@ func TestChartRepository_Get(t *testing.T) {
 	i.Add(&chart.Metadata{Name: "chart", Version: "0.0.1"}, "chart-0.0.1.tgz", "http://example.com/charts", "sha256:1234567890")
 	i.Add(&chart.Metadata{Name: "chart", Version: "0.1.0"}, "chart-0.1.0.tgz", "http://example.com/charts", "sha256:1234567890abc")
 	i.Add(&chart.Metadata{Name: "chart", Version: "0.1.1"}, "chart-0.1.1.tgz", "http://example.com/charts", "sha256:1234567890abc")
-	i.Add(&chart.Metadata{Name: "chart", Version: "0.1.5+b.minus.hour"}, "chart-0.1.5+b.minus.hour.tgz", "http://example.com/charts", "sha256:1234567890abc")
-	i.Entries["chart"][len(i.Entries["chart"])-1].Created = time.Now().Add(time.Hour)
-	i.Add(&chart.Metadata{Name: "chart", Version: "0.1.5+b.minus.sec"}, "chart-0.1.5+b.minus.sec.tgz", "http://example.com/charts", "sha256:1234567890abc")
-	i.Entries["chart"][len(i.Entries["chart"])-1].Created = time.Now().Add(time.Second)
-	i.Add(&chart.Metadata{Name: "chart", Version: "0.1.5+b.minus.min"}, "chart-0.1.5+b.minus.min.tgz", "http://example.com/charts", "sha256:1234567890abc")
-	i.Entries["chart"][len(i.Entries["chart"])-1].Created = time.Now().Add(time.Minute)
+	i.Add(&chart.Metadata{Name: "chart", Version: "0.1.5+b.min.minute"}, "chart-0.1.5+b.min.minute.tgz", "http://example.com/charts", "sha256:1234567890abc")
+	i.Entries["chart"][len(i.Entries["chart"])-1].Created = time.Now().Add(-time.Minute)
+	i.Add(&chart.Metadata{Name: "chart", Version: "0.1.5+a.min.hour"}, "chart-0.1.5+a.min.hour.tgz", "http://example.com/charts", "sha256:1234567890abc")
+	i.Entries["chart"][len(i.Entries["chart"])-1].Created = time.Now().Add(-time.Hour)
+	i.Add(&chart.Metadata{Name: "chart", Version: "0.1.5+c.now"}, "chart-0.1.5+c.now.tgz", "http://example.com/charts", "sha256:1234567890abc")
 	i.Add(&chart.Metadata{Name: "chart", Version: "0.2.0"}, "chart-0.2.0.tgz", "http://example.com/charts", "sha256:1234567890abc")
 	i.Add(&chart.Metadata{Name: "chart", Version: "1.0.0"}, "chart-1.0.0.tgz", "http://example.com/charts", "sha256:1234567890abc")
 	i.Add(&chart.Metadata{Name: "chart", Version: "1.0.0"}, "chart-1.0.0.tgz", "http://example.com/charts", "sha256:1234567890abc")
@@ -182,7 +181,7 @@ func TestChartRepository_Get(t *testing.T) {
 			name:         "match newest build",
 			chartName:    "chart",
 			chartVersion: "0.1.5",
-			wantVersion:  "0.1.5+b.minus.sec",
+			wantVersion:  "0.1.5+c.now",
 		},
 	}
 

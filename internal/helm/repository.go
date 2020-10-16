@@ -106,20 +106,21 @@ func (r *ChartRepository) Get(name, version string) (*repo.ChartVersion, error) 
 
 	// Sort versions
 	sort.SliceStable(matchingVersions, func(i, j int) bool {
-		left := matchingVersions[i]
-		right := matchingVersions[j]
+		return !(func() bool {
+			left := matchingVersions[i]
+			right := matchingVersions[j]
 
-		if !left.Equal(right) {
-			return left.LessThan(right)
-		}
+			if !left.Equal(right) {
+				return left.LessThan(right)
+			}
 
-		// Versions can be equal with different metadata since metadata is not
-		// covered as a part of the comparable version as per spec.
-		// Having chart creation timestamp at our disposal, we keep chronological
-		// order for packages with the same build metadata.
-		return chartVersionLookup[left].Created.Before(chartVersionLookup[right].Created)
+			// Versions can be equal with different metadata since metadata is not
+			// covered as a part of the comparable version as per spec.
+			// Having chart creation timestamp at our disposal, we keep chronological
+			// order for packages with the same build metadata.
+			return chartVersionLookup[left].Created.Before(chartVersionLookup[right].Created)
+		})()
 	})
-	sort.Sort(sort.Reverse(matchingVersions))
 
 	topMatchingVersion := matchingVersions[0]
 	if versionLatestStable {
